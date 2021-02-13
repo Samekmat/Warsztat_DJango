@@ -18,7 +18,7 @@ from django.urls import path
 from warsztat import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
     path('room/new/', views.AddRoomView.as_view(), name='AddRoom'),
 
 ]
