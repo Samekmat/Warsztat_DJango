@@ -1,10 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'index.html' %}
+{% block content %}
 
-</body>
-</html>
+    <table>
+
+  <thead>
+
+    <tr>
+
+      <th scope="col">#</th>
+
+      <th scope="col">Name</th>
+
+      <th scope="col">Capacity</th>
+
+      <th scope="col" colspan="4">ProjectorAvailability</th>
+
+    </tr>
+
+  </thead>
+
+  <tbody>
+
+    {% for room in rooms %}
+
+    <tr>
+
+      <th scope="row">{{ room.id }}</th>
+
+      <td>
+
+        <a href="/room/{{ room.id }}/">{{ room.name }}</a>
+
+      </td>
+
+      <td>{{ room.capacity }}</td>
+
+      {% if room.projector_availability %}
+
+        <td></td>
+
+      {% else %}
+
+        <td></td>
+
+      {% endif %}
+
+      <td>
+
+        <a href="/room/modify/{{ room.id }}/">edit</a>
+
+      </td>
+
+      <td>
+
+        <a href="/room/delete/{{ room.id }}/">delete</a>
+
+      </td>
+
+      <td>
+
+        <a href="/room/reserve/{{ room.id }}/">reservation</a>
+
+      </td>
+
+    </tr>
+
+    {% empty %}
+
+      <tr><td colspan="6">Brak dostępnych sal</td></tr>
+
+    {% endfor %}
+
+  </tbody>
+
+</table>
+{% endblock %}

@@ -24,4 +24,20 @@ class AddRoomView(View):
             return render(request, 'add_room.html', context={'Error': 'Room with this name already exists'})
 
         Room.objects.create(name=name, capacity=capacity, projector_availability=projector)
-        return redirect('index')
+        return redirect('RoomList')
+
+
+class RoomListView(View):
+    def get(self, request):
+        rooms = Room.objects.all()
+        return render(request, 'rooms.html', context={'rooms': rooms})
+
+
+class DeleteRoomView(View):
+
+    def get(self, request, id):
+        room = Room.objects.get(pk=id)
+        room.delete()
+        return redirect('RoomList')
+
+

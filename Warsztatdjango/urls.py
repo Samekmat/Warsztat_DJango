@@ -18,7 +18,8 @@ from django.urls import path
 from warsztat import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.RoomListView.as_view(), name='RoomList'),
     path('room/new/', views.AddRoomView.as_view(), name='AddRoom'),
+    path('room/delete/<int:id>/', views.DeleteRoomView.as_view(), name="DeleteRoom"),
 
 ]
