@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <form action="" method="POST">
+      {% csrf_token %}
+
+        <label for="rname">Room name:</label>
+        <input type="text" id="rname" name="room_name">
+        <br>
+        <label for="rcapacity">Room capacity:</label>
+        <input type="number" id="rcapacity" name="room_capacity">
+        <br>
+       Is projector available?: <br>
+        <input type="checkbox" id="projector" name="projector" value="True">
+        <label for="projector">True</label><br>
+
+    </form>
+
+
+
+{% endblock %}
