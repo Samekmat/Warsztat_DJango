@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from warsztat.models import Room
+from warsztat.models import Room, Reservation
+import datetime
+
 
 def index(request):
     return render(request, 'index.html')
+
 
 class AddRoomView(View):
 
@@ -28,6 +31,7 @@ class AddRoomView(View):
 
 
 class RoomListView(View):
+
     def get(self, request):
         rooms = Room.objects.all()
         return render(request, 'rooms.html', context={'rooms': rooms})
@@ -65,4 +69,24 @@ class ModifyRoomView(View):
         room.capacity = capacity
         room.projector_availability = projector
         room.save()
+        return redirect('RoomList')
+
+
+class ReserveRoomView(View):
+
+    def get(self, request, id):
+        room = Room.objects.get(pk=id)
+        return render(request, 'reservation.html', context={'room': room})
+
+    def post(self, request, id):
+        room = Room.objects.get(pk=id)
+        date = request.POST.get('reservation_date')
+        comment = request.POST.get('comment')
+
+        if Reservation.objects.filter(room=room, date=date):
+            return render(request, 'reservation.html', context={'room': room, 'error': 'Room is reserved'})
+        if date < str(datetime.data.today()):
+            return render(request, 'reservation.html', context={'room': room, 'error': 'Date is wrong, look further!'})
+
+        Reservation.objects.create(room=room, date=date, comment=comment)
         return redirect('RoomList')

@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+{% block content %}
+    <h2>Room name: {{ room.name }}</h2>
+    <form action="" method="POST">
+      {% csrf_token %}
+
+        <label for="reservation_date">Date of reservation:</label>
+        <input type="date" id="reservation_date" name="reservation_date">
+        <br>
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment"></textarea>
+        <br>
+        <input type="submit" value="Send reservation">
+    </form>
+
+
+
+{% endblock %}
