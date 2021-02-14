@@ -1,18 +1,32 @@
 {% extends 'index.html' %}
 {% block content %}
     <h2>Room name: {{ room.name }}</h2>
-    <form action="" method="POST">
-      {% csrf_token %}
+    <p>Room capacity: {{ room.capacity }}</p>
+    <p>Projector availabilty:
+        {% if room.projector_availability %}
+        <p>Available</p>
+        {% else %}
+        <p>Not available</p>
+        {% endif %}
+    </p>
 
-        <label for="reservation_date">Date of reservation:</label>
-        <input type="date" id="reservation_date" name="reservation_date">
-        <br>
-        <label for="comment">Comment:</label>
-        <textarea id="comment" name="comment"></textarea>
-        <br>
-        <input type="submit" value="Send reservation">
-    </form>
+    <h2>Reservations</h2>
 
+    <ul>
+      {% for reservation in reservations %}
 
+        <li>
+          <h3>{{ reservation.date }}</h3>
+          <p>{{ reservation.comment }}</p>
+        </li>
+
+      {% endfor %}
+    </ul>
+
+    <p>
+      <a href="/room/modify/{{ room.id }}/">edit</a>
+      <a href="/room/delete/{{ room.id }}/">delete</a>
+      <a href="/room/reserve/{{ room.id }}/">reserve</a>
+    </p>
 
 {% endblock %}
