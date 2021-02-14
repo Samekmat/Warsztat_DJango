@@ -39,20 +39,20 @@ class RoomListView(View):
 
 class DeleteRoomView(View):
 
-    def get(self, request, id):
-        room = Room.objects.get(pk=id)
+    def get(self, request, room_id):
+        room = Room.objects.get(pk=room_id)
         room.delete()
         return redirect('RoomList')
 
 
 class ModifyRoomView(View):
 
-    def get(self, request, id):
-        room = Room.objects.get(pk=id)
+    def get(self, request, room_id):
+        room = Room.objects.get(pk=room_id)
         return render(request, 'modify_room.html', context={'room': room})
 
-    def post(self, request, id):
-        room = Room.objects.get(pk=id)
+    def post(self, request, room_id):
+        room = Room.objects.get(pk=room_id)
         name = request.POST.get('room_name')
         capacity = request.POST.get('room_capacity')
         capacity = int(capacity) if capacity else 0
@@ -74,18 +74,18 @@ class ModifyRoomView(View):
 
 class ReserveRoomView(View):
 
-    def get(self, request, id):
-        room = Room.objects.get(pk=id)
+    def get(self, request, room_id):
+        room = Room.objects.get(pk=room_id)
         return render(request, 'reservation.html', context={'room': room})
 
-    def post(self, request, id):
-        room = Room.objects.get(pk=id)
+    def post(self, request, room_id):
+        room = Room.objects.get(pk=room_id)
         date = request.POST.get('reservation_date')
         comment = request.POST.get('comment')
 
         if Reservation.objects.filter(room=room, date=date):
             return render(request, 'reservation.html', context={'room': room, 'error': 'Room is reserved'})
-        if date < str(datetime.data.today()):
+        if date < str(datetime.date.today()):
             return render(request, 'reservation.html', context={'room': room, 'error': 'Date is wrong, look further!'})
 
         Reservation.objects.create(room=room, date=date, comment=comment)

@@ -20,8 +20,8 @@ from warsztat import views
 urlpatterns = [
     path('', views.RoomListView.as_view(), name='RoomList'),
     path('room/new/', views.AddRoomView.as_view(), name='AddRoom'),
-    path('room/delete/<int:id>/', views.DeleteRoomView.as_view(), name="DeleteRoom"),
-    path('room/modify/<int:id>/', views.ModifyRoomView.as_view(), name="ModifyRoom"),
-    path('room/reserve/<int:id>/', views.ReserveRoomView.as_view(), name="ReserveRoom"),
+    path('room/delete/<int:room_id>/', views.DeleteRoomView.as_view(), name="DeleteRoom"),
+    path('room/modify/<int:room_id>/', views.ModifyRoomView.as_view(), name="ModifyRoom"),
+    path('room/reserve/<int:room_id>/', views.ReserveRoomView.as_view(), name="ReserveRoom"),
 
 ]

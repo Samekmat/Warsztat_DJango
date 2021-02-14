@@ -9,8 +9,8 @@ class Room(models.Model):
 
 class Reservation(models.Model):
     date = models.DateField()
-    room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
-    comment = models.TextField
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    comment = models.TextField()
 
 
 class Meta:
