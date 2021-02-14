@@ -7,12 +7,13 @@
 
     <tr>
 
-      <th scope="col">#</th>
+      <th scope="col">Id</th>
 
       <th scope="col">Name</th>
 
       <th scope="col">Capacity</th>
 
+      <th scope="col">RoomAvailability</th>
       <th scope="col" colspan="4">ProjectorAvailability</th>
 
     </tr>
@@ -34,7 +35,15 @@
       </td>
 
       <td>{{ room.capacity }}</td>
+        {% if room.reserved %}
 
+        <td>Reserved</td>
+
+      {% else %}
+
+        <td>Available</td>
+
+      {% endif %}
       {% if room.projector_availability %}
 
         <td></td>

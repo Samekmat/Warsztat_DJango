@@ -34,7 +34,12 @@ class RoomListView(View):
 
     def get(self, request):
         rooms = Room.objects.all()
-        return render(request, 'rooms.html', context={'rooms': rooms})
+
+        for room in rooms:
+            reservation_dates = [reservation.date for reservation in room.roomreservation_set.all()]
+            room.reserved = datetime.date.today() in reservation_dates
+
+        return render(request, "rooms.html", context={"rooms": rooms})
 
 
 class DeleteRoomView(View):
@@ -90,3 +95,11 @@ class ReserveRoomView(View):
 
         Reservation.objects.create(room=room, date=date, comment=comment)
         return redirect('RoomList')
+
+
+class RoomDetailsView(View):
+
+    def get(self, request, room_id):
+        room = Room.objects.get(pk=room_id)
+        reservations = room.reservation_set.filter(date__gte=str(datetime.date.today())).order_by('date')
+        return render(request, "details_room.html", context={"room": room, "reservations": reservations})

@@ -23,5 +23,6 @@ urlpatterns = [
     path('room/delete/<int:room_id>/', views.DeleteRoomView.as_view(), name="DeleteRoom"),
     path('room/modify/<int:room_id>/', views.ModifyRoomView.as_view(), name="ModifyRoom"),
     path('room/reserve/<int:room_id>/', views.ReserveRoomView.as_view(), name="ReserveRoom"),
+    path('room/<int:room_id>/', views.RoomDetailsView.as_view(), name="RoomDetails"),
 
 ]
