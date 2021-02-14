@@ -41,3 +41,28 @@ class DeleteRoomView(View):
         return redirect('RoomList')
 
 
+class ModifyRoomView(View):
+
+    def get(self, request, id):
+        room = Room.objects.get(pk=id)
+        return render(request, 'modify_room.html', context={'room': room})
+
+    def post(self, request, id):
+        room = Room.objects.get(pk=id)
+        name = request.POST.get('room_name')
+        capacity = request.POST.get('room_capacity')
+        capacity = int(capacity) if capacity else 0
+        projector = request.POST.get('projector')
+
+        if not name:
+            return render(request, 'modify_room.html', context={'Error': 'Room name is empty'})
+        if capacity < 0:
+            return render(request, 'modify_room.html', context={'Error': 'Room capacity must be even'})
+        if Room.objects.filter(name=name).first():
+            return render(request, 'modify_room.html', context={'Error': 'Room with this name already exists'})
+
+        room.name = name
+        room.capacity = capacity
+        room.projector_availability = projector
+        room.save()
+        return redirect('RoomList')
