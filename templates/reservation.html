@@ -12,7 +12,18 @@
         <br>
         <input type="submit" value="Send reservation">
     </form>
+    <h2>Reservations</h2>
 
+    <ul>
+      {% for reservation in reservations %}
+
+        <li>
+          <h3>{{ reservation.date }}</h3>
+          <p>{{ reservation.comment }}</p>
+        </li>
+
+      {% endfor %}
+    </ul>
 
 
 {% endblock %}

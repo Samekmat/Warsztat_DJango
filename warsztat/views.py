@@ -36,7 +36,7 @@ class RoomListView(View):
         rooms = Room.objects.all()
 
         for room in rooms:
-            reservation_dates = [reservation.date for reservation in room.roomreservation_set.all()]
+            reservation_dates = [reservation.date for reservation in room.reservation_set.all()]
             room.reserved = datetime.date.today() in reservation_dates
 
         return render(request, "rooms.html", context={"rooms": rooms})
@@ -81,17 +81,19 @@ class ReserveRoomView(View):
 
     def get(self, request, room_id):
         room = Room.objects.get(pk=room_id)
-        return render(request, 'reservation.html', context={'room': room})
+        reservations = room.reservation_set.filter(date__gte=str(datetime.date.today())).order_by('date')
+        return render(request, 'reservation.html', context={'room': room, 'reservations': reservations})
 
     def post(self, request, room_id):
         room = Room.objects.get(pk=room_id)
         date = request.POST.get('reservation_date')
         comment = request.POST.get('comment')
+        reservations = room.reservation_set.filter(date__gte=str(datetime.date.today())).order_by('date')
 
         if Reservation.objects.filter(room=room, date=date):
-            return render(request, 'reservation.html', context={'room': room, 'error': 'Room is reserved'})
+            return render(request, 'reservation.html', context={'room': room, 'error': 'Room is reserved', 'reservations': reservations})
         if date < str(datetime.date.today()):
-            return render(request, 'reservation.html', context={'room': room, 'error': 'Date is wrong, look further!'})
+            return render(request, 'reservation.html', context={'room': room, 'error': 'Date is wrong, look further!', 'reservations': reservations})
 
         Reservation.objects.create(room=room, date=date, comment=comment)
         return redirect('RoomList')
