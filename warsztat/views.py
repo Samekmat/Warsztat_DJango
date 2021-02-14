@@ -17,7 +17,7 @@ class AddRoomView(View):
         name = request.POST.get('room_name')
         capacity = request.POST.get('room_capacity')
         capacity = int(capacity) if capacity else 0
-        projector = request.POST.get('projector')
+        projector = request.GET.get("projector") == 'on'
 
         if not name:
             return render(request, 'add_room.html', context={'Error': 'Room name is empty'})
@@ -61,7 +61,7 @@ class ModifyRoomView(View):
         name = request.POST.get('room_name')
         capacity = request.POST.get('room_capacity')
         capacity = int(capacity) if capacity else 0
-        projector = request.POST.get('projector')
+        projector = request.GET.get("projector") == 'on'
 
         if not name:
             return render(request, 'modify_room.html', context={'Error': 'Room name is empty'})
@@ -105,3 +105,30 @@ class RoomDetailsView(View):
         room = Room.objects.get(pk=room_id)
         reservations = room.reservation_set.filter(date__gte=str(datetime.date.today())).order_by('date')
         return render(request, "details_room.html", context={"room": room, "reservations": reservations})
+
+
+class SearchView(View):
+
+    def get(self, request):
+        name = request.GET.get("rname")
+        capacity = request.GET.get("capacity")
+        capacity = int(capacity) if capacity else 0
+        projector = request.GET.get("projector") == 'on'
+        rooms = Room.objects.all()
+
+        if projector:
+            rooms = rooms.filter(projector_availability=projector)
+
+        if capacity:
+            rooms = rooms.filter(capacity__gte=capacity)
+
+        if name:
+            rooms.filter(name__contains=name)
+
+        for room in rooms:
+
+            reservation_dates = [reservation.date for reservation in room.reservation_set.all()]
+
+            room.reserved = str(datetime.date.today()) in reservation_dates
+
+        return render(request, "rooms.html", context={"rooms": rooms, "date": datetime.date.today()})
